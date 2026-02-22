@@ -1,1 +1,1 @@
-# peptide-assistant
+Peptide assistant

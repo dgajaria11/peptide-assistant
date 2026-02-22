@@ -1,8 +1,14 @@
-
+# Environment variables - never push this
 .env
 
-data/
+# Data files - too large for GitHub
+data/pubmed_raw.json
+data/clinicaltrials_raw.json
+data/chunks.json
+data/chunks_indexed.json
+data/faiss_index.bin
 
+# Python virtual environment
 venv/
 
 # Python cache
