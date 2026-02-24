@@ -42,13 +42,6 @@ def retrieve(query, k=5):
 
 
 def build_prompt(question, retrieved_chunks):
-    """
-    Takes the user question and retrieved chunks and builds
-    a prompt that instructs the LLM how to answer.
-    This is where we enforce the educational framing
-    and responsible AI design for your application.
-    """
-    # Format the retrieved chunks into a readable context block
     context_parts = []
     for i, chunk in enumerate(retrieved_chunks):
         context_parts.append(f"[Source {i+1} - {chunk['source']}]\n{chunk['text']}")
@@ -63,9 +56,11 @@ Your role is to:
 - Use plain language that someone without a science background can understand
 - Always remind users this is for educational purposes only, not medical advice
 - Be honest when research is limited or inconclusive
+- Never say "you've shared" or "the research you provided" — the research comes from a database, not from the user
 
 Use ONLY the provided research context to answer. Do not make up information.
 If the context does not contain enough information to answer, say so clearly.
+Refer to sources as "published research" or "studies" not as something the user shared.
 
 RESEARCH CONTEXT:
 {context}
@@ -85,7 +80,7 @@ def generate_answer(prompt):
     response = client.chat_completion(
         model="mistralai/Mistral-7B-Instruct-v0.2",
         messages=[{"role": "user", "content": prompt}],
-        max_tokens=500,
+        max_tokens=750,
         temperature=0.3
     )
     
