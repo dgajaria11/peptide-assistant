@@ -12,9 +12,19 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 
 # Load everything we built
 model = SentenceTransformer("all-MiniLM-L6-v2")
-index = faiss.read_index("data/faiss_index.bin")
+# Works both locally and on Hugging Face Spaces
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+INDEX_PATH = os.path.join(BASE_DIR, '..', 'data', 'faiss_index.bin')
+CHUNKS_PATH = os.path.join(BASE_DIR, '..', 'data', 'chunks_indexed.json')
 
-with open("data/chunks_indexed.json") as f:
+# Fall back to root directory for Hugging Face Spaces
+if not os.path.exists(INDEX_PATH):
+    INDEX_PATH = os.path.join(BASE_DIR, '..', 'faiss_index.bin')
+    CHUNKS_PATH = os.path.join(BASE_DIR, '..', 'chunks_indexed.json')
+
+index = faiss.read_index(INDEX_PATH)
+
+with open(CHUNKS_PATH) as f:
     chunks = json.load(f)
 
 print("RAG pipeline loaded successfully")
