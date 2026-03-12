@@ -5,11 +5,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# Load from root directory when deployed on Hugging Face Spaces
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-DATA_DIR = os.path.join(BASE_DIR, '..') if os.path.exists(os.path.join(BASE_DIR, '..', 'faiss_index.bin')) else BASE_DIR
-
-sys.path.append(os.path.join(BASE_DIR, '..', 'scripts'))
+# Add scripts directory to path
+sys.path.append(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'scripts'))
 
 from rag_pipeline import retrieve, build_prompt, generate_answer
 
