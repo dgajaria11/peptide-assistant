@@ -85,7 +85,9 @@ EDUCATIONAL ANSWER:"""
 
 
 def generate_answer(prompt):
-    client = InferenceClient(token=HF_TOKEN)
+    token = os.getenv("HF_TOKEN")
+    client = InferenceClient(token=token)
+    
     
     response = client.chat_completion(
         model="mistralai/Mistral-7B-Instruct-v0.2",
