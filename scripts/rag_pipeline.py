@@ -85,12 +85,21 @@ EDUCATIONAL ANSWER:"""
 
 
 def generate_answer(prompt):
-    token = os.getenv("HF_TOKEN")
-    client = InferenceClient(token=token)
+    import os
+    from huggingface_hub import InferenceClient
     
+    token = os.getenv("HF_TOKEN")
+    
+    if not token:
+        return "Error: HF_TOKEN environment variable not set."
+    
+    client = InferenceClient(
+        provider="hf-inference",
+        token=token
+    )
     
     response = client.chat_completion(
-        model="meta-llama/Llama-3.2-3B-Instruct",
+        model="meta-llama/Meta-Llama-3-8B-Instruct",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=750,
         temperature=0.3
