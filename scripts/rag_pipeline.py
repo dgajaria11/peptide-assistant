@@ -90,7 +90,7 @@ def generate_answer(prompt):
     
     
     response = client.chat_completion(
-        model="mistralai/Mistral-7B-Instruct-v0.3",
+        model="meta-llama/Llama-3.2-3B-Instruct",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=750,
         temperature=0.3
