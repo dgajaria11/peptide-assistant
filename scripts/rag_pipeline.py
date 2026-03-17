@@ -94,12 +94,12 @@ def generate_answer(prompt):
         return "Error: HF_TOKEN environment variable not set."
     
     client = InferenceClient(
-        provider="hf-inference",
+        provider="groq",
         token=token
     )
     
     response = client.chat_completion(
-        model="meta-llama/Meta-Llama-3-8B-Instruct",
+        model="meta-llama/Llama-3.3-70B-Instruct",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=750,
         temperature=0.3
