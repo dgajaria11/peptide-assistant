@@ -12,15 +12,34 @@ HF_TOKEN = os.getenv("HF_TOKEN")
 
 # Load everything we built
 model = SentenceTransformer("all-MiniLM-L6-v2")
-# Works both locally and on Hugging Face Spaces
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-INDEX_PATH = os.path.join(BASE_DIR, '..', 'data', 'faiss_index.bin')
-CHUNKS_PATH = os.path.join(BASE_DIR, '..', 'data', 'chunks_indexed.json')
+# Download data files from Hugging Face dataset if not present
+def download_data_files():
+    os.makedirs("data", exist_ok=True)
+    
+    if not os.path.exists("data/faiss_index.bin"):
+        print("Downloading faiss_index.bin...")
+        from huggingface_hub import hf_hub_download
+        hf_hub_download(
+            repo_id="dgajaria/peptide-data",
+            filename="faiss_index.bin",
+            repo_type="dataset",
+            local_dir="data"
+        )
+    
+    if not os.path.exists("data/chunks_indexed.json"):
+        print("Downloading chunks_indexed.json...")
+        from huggingface_hub import hf_hub_download
+        hf_hub_download(
+            repo_id="dgajaria/peptide-data",
+            filename="chunks_indexed.json",
+            repo_type="dataset",
+            local_dir="data"
+        )
 
-# Fall back to root directory for Hugging Face Spaces
-if not os.path.exists(INDEX_PATH):
-    INDEX_PATH = os.path.join(BASE_DIR, '..', 'faiss_index.bin')
-    CHUNKS_PATH = os.path.join(BASE_DIR, '..', 'chunks_indexed.json')
+download_data_files()
+
+INDEX_PATH = "data/faiss_index.bin"
+CHUNKS_PATH = "data/chunks_indexed.json"
 
 index = faiss.read_index(INDEX_PATH)
 
